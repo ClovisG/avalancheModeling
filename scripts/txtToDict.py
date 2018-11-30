@@ -51,7 +51,6 @@ with open("events.dict",'wb') as fileout:
         pickle.dump(events, fileout, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-# 06 99 01 03 82
 
 
 
