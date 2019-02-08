@@ -36,5 +36,16 @@ python3 dictToTsv.py
 
 There is still some bugs in the parsing of the data, feel free to improve the scripts!
 
+### Notes on the CampToCamp.org API
 
+Can query outings through:
+```
+https://api.camptocamp.org/outings?bbox=-549043%2C4306073%2C1466449%2C6933061&act=skitouring&date=2016-11-20%2C2016-11-26&pl=fr
+```
+
+Converting WGS84 GPS coordinate system to Web Mercator Bbox in Python:
+```
+from pyproj import Proj, transform
+print(transform(Proj(init='epsg:4326'), Proj(init='epsg:3857'), -0.1285907, 51.50809))  # longitude first, latitude second.
+```
 
