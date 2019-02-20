@@ -15,6 +15,8 @@ last_page = 121 # TODO : find automatically the number of pages
 # Adress where you can find the outings
 URL = 'http://www.skitour.fr/conditions/'
 
+parsed_events = []
+
 # Key words used to determine if there was an avalanch activity
 with open("mots-cles-neg.txt") as f:
     key_words = f.read().splitlines()
@@ -45,21 +47,43 @@ def find_negatives(last_page, key_words):
                 match = re.search('Activité avalancheuse observée :(.*)Skiabilité', outing.text)
                 # Check if the activity is negative
                 if(match != None and any(word in match.group(1) for word in key_words)):
-                    parse_outing(outing, ref)
+                    parsed_events.append(parse_outing(outing, ref))
 
 """
 Parses the outing from the website into a dictionnary, whose fields describe the activity
 (date, approximate location, value of the inclination)
 
-Argument :
+Arguments :
     outing : BeautifulSoup object representing the negative activity detected
     ref : reference to the content to be parsed
+
+Returns :
+    A dictionnary containing some data found on the page.
 """
 def parse_outing(outing, ref):
+    data = {}
+
     req = requests.get("{}{}".format(URL, ref))
     soup = BeautifulSoup(req.text, "lxml")
 
     date = re.search("Sortie du (.*)par", soup.title.text).group(1)
-    print(date)
+    data["date"] = date
+
+    # The general informations are situated in the first "table" tag
+    outing_data = soup.find("table")
+    massif = outing_data.find("strong",text="Massif : ").nextSibling
+    secteur = outing_data.find("strong",text="Secteur : ").nextSibling
+    orientation = outing_data.find("strong",text="Orientation : ").nextSibling
+    data["massif"] = massif
+    data["secteur"] = secteur
+    data["orientation"] = orientation
+
+    return data
+
+"""
+Parses a page describing a location, and returns the gps coordinates of that location
+"""
+def parse_starting_point(ref):
+    pass
 
 find_negatives(last_page, key_words)
