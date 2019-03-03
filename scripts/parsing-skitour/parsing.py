@@ -35,7 +35,7 @@ def find_last_page():
 
         n = int(soup.find("p", {"class": "centre"}).contents[-3].text)
         logging.debug("Number of pages : {}\n".format(n))
-        return 1
+        return n
 
 
 """
