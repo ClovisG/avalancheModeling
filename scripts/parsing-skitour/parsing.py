@@ -11,7 +11,8 @@ import requests # Enable us to use html resquests
 import re # Regular expressions)
 import logging, sys # For debugging information
 
-logging.basicConfig(stream = sys.stderr, level=logging.DEBUG)
+# Comment or uncomment if you want debug information
+logging.basicConfig(stream = sys.stderr, level=logging.INFO)
 
 # Adress where you can find the outings
 URL = 'http://www.skitour.fr/conditions/'
@@ -34,7 +35,7 @@ def find_last_page():
 
         n = int(soup.find("p", {"class": "centre"}).contents[-3].text)
         logging.debug("Number of pages : {}\n".format(n))
-        return n
+        return 1
 
 
 """
@@ -49,9 +50,10 @@ Arguments :
         key_words : the words used to determine if the activity was negative
         parsed_events : the list where the parsed events are to be stored
 """
-def find_negatives(last_page, key_words, parsed_events):
+def parse_html(last_page, key_words, parsed_events):
     # There are a lot of pages, and on every page, a few ski outings to parse
     for i in range(1, last_page+1):
+        logging.info("Parsing page {} out of {}".format(i, last_page))
         req = requests.get("{}?p={}".format(URL, i))
         soup = BeautifulSoup(req.text, "lxml")
         outings = soup.find("div", {"id": "cont"}).find("div", {"class": "cadre"}, recursive = False)
@@ -60,12 +62,15 @@ def find_negatives(last_page, key_words, parsed_events):
             ref = title.find("a")["href"] # Adress to the actual content of the outing
             outing = title.findNext("ul")
             if("avalancheuse" in outing.text):
-                match = re.search('Activité avalancheuse observée :(.*)Skiabilité', outing.text)
+                match = re.search('Activité avalancheuse observée : (.*)Skiabilité', outing.text)
                 # Check if the activity is negative
                 if(match != None and any(word in match.group(1) for word in key_words)):
                     logging.info("Parsing {}".format(ref))
                     parsed_events.append(parse_outing(ref))
-                    logging.info("Done.\n")
+                    parsed_events[-1]["activite"] = match.group(1)
+                    logging.debug(parsed_events[-1])
+                    logging.info("Done.")
+        logging.info("")
 
 
 """
@@ -93,10 +98,11 @@ def parse_outing(ref):
     orientation = outing_data.find("strong",text="Orientation : ").nextSibling
     data["massif"] = massif
     data["orientation"] = orientation
+
     # Sometimes the sector is not specified
-    secteur = outing_data.find("strong",text="Secteur : ")
-    if(secteur != None):
-        data["secteur"] = secteur.nexSibling
+    secteur = outing_data.find("strong", text="Secteur : ")
+    if(secteur):
+        data["secteur"] = secteur.nextSibling
     else:
         data["secteur"] = ""
         logging.info("No sector data for {}".format(ref))
@@ -104,9 +110,12 @@ def parse_outing(ref):
     # Parsing of the gps coordinates
     link_to_location = outing_data.find("strong",text="Départ : ").findNext("a")
     coordinates = parse_starting_point(link_to_location["href"])
-    data["depart"] = coordinates
+    data["lat_depart"], data["lon_depart"] = coordinates
 
-    logging.debug(data)
+    # Parsing of the inclination
+    inclination = outing_data.find("strong", text="Pente : ").nextSibling
+    data["pente"] = inclination
+
     return data
 
 
@@ -122,22 +131,26 @@ Returns :
 def parse_starting_point(ref):
     req = requests.get("{}{}".format(URL, ref))
     soup = BeautifulSoup(req.text, "lxml")
-    coords = {}
+    lat, lon = "", ""
 
     coordinates = soup.find("abbr", {"title": "WGS84"})
     if(coordinates != None):
         coordinates = coordinates.nextSibling
         logging.debug("Coordonnees : {}".format(coordinates))
-        coords["lat"] = re.search(" : (.*) N", coordinates).group(1)
-        coords["lon"] = re.search(" / (.*) E", coordinates).group(1)
-        logging.debug("Latitude : {}".format(coords["lat"]))
-        logging.debug("Longitude : {}".format(coords["lon"]))
+        lat = re.search(" : (.*) N", coordinates).group(1)
+        lon = re.search(" / (.*) E", coordinates).group(1)
+        logging.debug("Latitude : {}".format(lat))
+        logging.debug("Longitude : {}".format(lon))
     else:
         logging.info("No coordinates for {}".format(ref))
-        coords["lat"] = ""
-        coords["lon"] = ""
 
-    return coords
+    return lat, lon
 
 
-find_negatives(find_last_page(), key_words, parsed_events)
+"""
+Parses the html page and returns a list of dictionaries containing 
+the informations about the outings
+"""
+def do_parsing():
+    parse_html(find_last_page(), key_words, parsed_events)
+    return parsed_events
