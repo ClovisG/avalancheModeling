@@ -1,0 +1,39 @@
+"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"
+"Historique :","","","Filiations entre les sites définies lors du toilettage du 19/01/2006 :
+Site 38521 002 (id 2603) --> site 38521 002 (id 11506)
+Site 38521 007 (id 2608) --> site 38521 002 (id 11506)","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Site","Dates","","","Altitudes","","","","Dépôt","","","Caractéristiques","","","","","","Météo 3 jours
+précédents","","","","","Météo 4h
+précédentes","","","","","","Causes","","","","Vic-
+times","","","Dégâts ou lieux
+atteints","","","","","","Obs",""
+"numéro
+id","date1","date2","","altitude départ","altitude arrivée","versant opposé","zone plane","longeur (m)","largeur (m)","hauteur (m)","A - type départ","B - sol visible ?","C - humidité départ","D - couloir / versant","E - aérosol ?","F - neige dépôt","hauteur de neige","vent fort","direction vent","redoux","pluie","neige","pluie","vent fort","ciel clair","nuages","brouillard","naturelle","involontaire","artificielle","inconnue","néant","blessés","morts","néant","construction","poteaux","forêt","routes","cours d'eau","visibilité","alerte bd event"
+"n°002
+id 2603","23/01/86
+00:00","23/01/86
+00:00","","2000","1150","","","","","","4","2","2","2","2","2","51-
+100","X","NO","X","","X","","X","","X","","X","","","","X","","","X","","","","","","",""
+"Remarque : Route du Payet coupée.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°007
+id 2608","23/01/86
+00:00","23/01/86
+00:00","","2100","1150","","","","","","4","2","2","2","2","2","51-
+100","X","NO","X","","X","","X","","X","","X","","","","X","","","X","","","","","","",""
+"Remarque : Route du Payet coupée.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°002
+id 2603","20/01/81
+00:00","20/01/81
+00:00","","1850","1100","","","","","","5","5","5","2","5","5",">100","X","NO","","X","X","","X","","X","","X","","","","X","","","","","","X","X","","",""
+"Remarque : Dégâts : Sous le chemin du Payet : bouleaux et frênes bordant la coulée, déracinés; quelques pins (nom incertain car mal écrit) du Domanial. Route allant au Payet en partie
+obstruée sur 30 m environ par de la terre arrachée au talus.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°002
+id 2603","02/02/78
+00:00","02/02/78
+00:00","","2080","1320","","","","","","2","2","1","2","5","1","51-
+100","","","","","X","","","","","","X","","","","X","","","","","","X","X","","",""
+"Remarque : Dégâts : Quelques arbres (10 m3 environ) en forêt Domaniale et 0,3 ha renversés dans les propriétés particulières.  Route du Poyet coupées sur une longueur de 80 ml environ.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°002
+id 2603","29/01/66
+00:00","30/01/66
+00:00","","1900","1350","","","","","","4","4","9","9","9","5","","","","","","","","","","","","","","","","","","","","","","","","","",""

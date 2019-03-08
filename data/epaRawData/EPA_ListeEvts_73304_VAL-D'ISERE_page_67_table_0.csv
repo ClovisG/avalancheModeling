@@ -1,0 +1,20 @@
+"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41"
+"Site","Dates","","Altitudes","","","","Dépôt","","","Caractéristiques","","","","","","Météo 3 jours
+précédents","","","","","Météo 4h
+précédentes","","","","","","Causes","","","","Vic-
+times","","","Dégâts ou lieux
+atteints","","","","","","Obs",""
+"numéro
+id","date1","date2","altitude départ","altitude arrivée","versant opposé","zone plane","longeur (m)","largeur (m)","hauteur (m)","A - type départ","B - sol visible ?","C - humidité départ","D - couloir / versant","E - aérosol ?","F - neige dépôt","hauteur de neige","vent fort","direction vent","redoux","pluie","neige","pluie","vent fort","ciel clair","nuages","brouillard","naturelle","involontaire","artificielle","inconnue","néant","blessés","morts","néant","construction","poteaux","forêt","routes","cours d'eau","visibilité","alerte bd event"
+"n°201
+id 6132","13/01/04
+00:00","13/01/04
+00:00","2210","1890","X","X","180","60","2.5","5","5","2","5","2","2","51-
+100","","er","","X","","X","","","","","X","","","","X","","","X","","","","","","er","er"
+"Remarque : Dépôt dans la 'ravine' de la Bouclia (nom incertain car mal écrit).  Dépôt : 180 m * 60 m * 2.5 m.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°201
+id 6132","12/01/04
+00:00","12/01/04
+00:00","2330","1800","X","X","","","","5","5","5","5","2","5","21-50","X","SO","","X","X","","","","","","X","","","","X","","","X","","","","","","er","er"
+"Remarque : Avalanche simultané dans le couloir CLPA N°2. Les départs se sont interceptés et sont arrivés sur le rond point sortie Sud de la Daille.  Fortes chutes de neige toute la journée,
+redoux et pluie à partir de 18 h 00.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""

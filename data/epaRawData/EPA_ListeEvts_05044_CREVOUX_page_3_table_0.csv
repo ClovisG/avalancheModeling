@@ -1,0 +1,55 @@
+"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"
+"Historique :","","","Filiations entre les sites définies lors du toilettage du 06/08/2003 :
+Site 05044 003 (id 469) --> site 05044 003 (id 6219)","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Site","Dates","","","Altitudes","","","","Dépôt","","","Caractéristiques","","","","","","Météo 3 jours
+précédents","","","","","Météo 4h
+précédentes","","","","","","Causes","","","","Vic-
+times","","","Dégâts ou lieux
+atteints","","","","","","Obs",""
+"numéro
+id","date1","date2","","altitude départ","altitude arrivée","versant opposé","zone plane","longeur (m)","largeur (m)","hauteur (m)","A - type départ","B - sol visible ?","C - humidité départ","D - couloir / versant","E - aérosol ?","F - neige dépôt","hauteur de neige","vent fort","direction vent","redoux","pluie","neige","pluie","vent fort","ciel clair","nuages","brouillard","naturelle","involontaire","artificielle","inconnue","néant","blessés","morts","néant","construction","poteaux","forêt","routes","cours d'eau","visibilité","alerte bd event"
+"n°003
+id 6219","08/03/17
+12:00","10/03/17
+11:00","","2400","1850","","","20","20","3.0","9","9","9","2","2","2","51-
+100","X","N","X","","","","X","X","","","X","","","","X","","","X","","","","","","BS","N"
+"Date du constat : 10/03/2017.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Dépôt au pied des barres.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","13/02/17
+07:00","18/02/17
+09:00","","2300","1825","","","30","20","1.5","9","9","9","2","2","2","0","?","","?","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 19/02/2017.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Dépôt en pied de falaise","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","05/03/13
+00:00","05/03/13
+00:00","","?","1800","","","80","40","0.5","9","9","1","2","2","1","?","X","","X","","?","","X","","X","X","X","","","","","X","X","X","","","","","","B","O"
+"Date du constat : 06/03/2013.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : 5 glacièristes ayant emprunté la ""goulotte des Enfers"" ont été pris dans la coulée. Le guide auto-assuré à un relai, blessé, a donné l'alerte à 14h58. Les 4 autres personnes,
+emportées dans le vide, sont décédées. La coulée correspond à une purge naturelle de la neige accumulée par un vent d'Est violent. Le dépôt est constitué de neige humide mais non mouillée
+(pas de blocs), les écoulements encore observés  dans la matinée du 6 mars se faisant à la manière de ""la farine"" Visite complémentaire le 7-03-13 après midi avec très bonne visibilité du site,
+mais ne permettant pas de préciser les conditions dans la zone de départ, le vent ayant rempli de neige les combes et le bas de l'entonoir supérieur (et à contrario dégarni toutes les
+crêtes)Altitude d'arrivée descendue de 1820 à 1800 m (et volume dépôt modifié) le 8-04-13 suite à la demande du responsable RTM.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","27/12/12
+00:00","28/12/12
+00:00","","2700","1750","","","200","100","0.5","8","5","1","1","2","1","21-50","X","","X","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 03/01/2013.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Avalanche de plaque avec rupture nette , liée à l'accumulation de neige par le vent. Le d&épôt a franchi le chemin de la Sêche pour arriver au niveau du torrent.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","06/02/12
+00:00","13/02/12
+00:00","","2650","2340","","","50","50","","8","2","1","5","2","1","0","X","NE","","","","","X","X","","","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 20/02/2012.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","06/12/10
+00:00","07/12/10
+00:00","","2650","2350","","","10","4","1.0","8","2","2","5","2","9","21-50","","","X","?","?","X","","?","X","X","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 08/12/2010.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Sur tout le haut du bassin une plaque de neige récente s'est décrochée (hauteur estimée à 40 cm) mais le dépôt n'a pas dépassé les barres rocheuses.
+Au pied des barres rocheuses, le dépôt est peu significatif.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°003
+id 6219","21/03/10
+00:00","22/03/10
+00:00","","2350","1900","","","50","10","2.0","4","3","2","2","2","2","0","","","X","X","","X","","","X","","X","","","","X","","","X","","","","","","B","N"
