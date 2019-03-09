@@ -15,13 +15,13 @@ def normaliseDate(date):
     return [day,month,year]
 
 def normaliseHeure(heure):
-    if (heure == ""):
+    if (heure == "nan"):
         return '12:00'
     else:
         return heure[:3]+'00'
 
 def normaliseNeige(neige):
-    if(neige == ""):
+    if(neige == "nan"):
         return 'undefined'
     else:
         return neige
@@ -48,7 +48,7 @@ df = pd.read_excel(inputFile)
 df = df[df['Decl a distance'] != 'true']
 
 
-for i in range(1,10):
+for i in range(4,10):
     print(i)
     id = df['Id'][i]
     orientation = df['Orientation'][i]
