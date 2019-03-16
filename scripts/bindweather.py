@@ -66,6 +66,8 @@ for i in range(4,10):
     print(day)
     print(month)
     print(year)
+    print(lon)
+    print(lat)
 
 
 
@@ -73,10 +75,16 @@ for i in range(4,10):
     'reanalysis-era5-single-levels',
     {
         'product_type':'reanalysis',
+        'lat':lat,
+        'lon':lon,
         'format':'netcdf',
         'variable':[
-            '2m_temperature','clear_sky_direct_solar_radiation_at_surface','large_scale_precipitation',
-            'large_scale_snowfall','snow_density','snow_depth',
+            '2m_temperature',
+            'clear_sky_direct_solar_radiation_at_surface',
+            'large_scale_precipitation',
+            'large_scale_snowfall',
+            'snow_density',
+            'snow_depth',
             'snowmelt'
         ],
         'year':year,
