@@ -6,19 +6,21 @@ Created on 18/02/19
 Author : Théo Larue
 """
 
-import logging  # For debugging information
-import re  # Regular expressions)
-import pickle
 import csv
+import logging  # For debugging information
+import os
+import re  # Regular expressions)
 import sys
 
 import requests  # Enables us to use html resquests
 from bs4 import BeautifulSoup  #  Parsing library for html files
 
+from gpx_parsing import *
+
 sys.setrecursionlimit(10000)
 
 # Comment or uncomment if you want debug information
-logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 # Adress where you can find the outings
 URL = 'http://www.skitour.fr/topos/dernieres-sorties/'
@@ -34,7 +36,7 @@ def find_last_page():
     """
     Returns the number of the last html page of the website. Used in 'find_negatives'
     """
-    req = requests.get(URL + "?lim=")
+    req = requests.get(URL + "?lim=&nbr=50")
     soup = BeautifulSoup(req.text, "lxml")
 
     n = int(soup.find("a", string="Suivante").findPrevious("a").text)
@@ -59,14 +61,14 @@ def parse_html(first_page, last_page, key_words, parsed_events):
     # There are a lot of pages, and on every page, a few ski outings to parse
     for i in range(first_page, last_page + 1):
         logging.info("Parsing page {} out of {}".format(i, last_page))
-        req = requests.get("{}?lim=&p={}".format(URL, i))
+        req = requests.get("{}?lim=&nbr=50&p={}".format(URL, i))
         soup = BeautifulSoup(req.text, "lxml")
         outings = soup.find("table", {"class": "topos"}).find_all('a')[10:]
 
         for outing_ref in outings:
             ref = outing_ref["href"]  # Adress to the actual content of the outing
-            event = parse_outing(ref, key_words)
             logging.info("Parsing {}".format(ref))
+            event = parse_outing(ref, key_words)
             if event is not None:
                 parsed_events.append(event)
                 logging.debug(parsed_events[-1])
@@ -84,28 +86,28 @@ def parse_outing(ref, key_words):
     Returns :
         A dictionnary containing some data found on the page.
     """
+    # Initialisation
     data = {}
 
     logging.debug(URL + "../" + ref)
     req = requests.get("{}".format(URL + "../" + ref))
     soup = BeautifulSoup(req.text, "lxml")
 
+    # Detection of avalanch activity
     topo_neige = soup.find("div", {"class": "neige_topo"}).getText()
     activity = re.search("Activité avalancheuse observée : (.*)Skiabilité", topo_neige)
     if not (activity is not None and any(word in activity.group(1) for word in key_words)):
         # if an avalanche activity is detected, do not parse.
         return None
 
+    # Date
     date = re.search("Sortie du (.*)par", soup.title.text).group(1)
     data["date"] = date
 
-    # The general informations are situated in the first "table" tag
+    # Mountain chain, sector
     outing_data = soup.find("table")
     massif = outing_data.find("strong", text="Massif : ").nextSibling
-    orientation = outing_data.find("strong", text="Orientation : ").nextSibling
     data["massif"] = massif
-    data["orientation"] = orientation
-
     # Sometimes the sector is not specified
     secteur = outing_data.find("strong", text="Secteur : ")
     if secteur:
@@ -113,14 +115,29 @@ def parse_outing(ref, key_words):
     else:
         data["secteur"] = ""
 
-    # Parsing of the gps coordinates
+    # Orientation
+    orientation = outing_data.find("strong", text="Orientation : ").nextSibling
+    data["orientation"] = orientation
+
+    # Starting gps coordinates
     link_to_location = outing_data.find("strong", text="Départ : ").findNext("a")
     coordinates = parse_starting_point(link_to_location["href"])
     data["lat_depart"], data["lon_depart"] = coordinates
 
-    # Parsing of the inclination
+    # Inclination
     inclination = outing_data.find("strong", text="Pente : ").nextSibling
     data["pente"] = inclination
+
+    # Average gps coordinates and altitude for more precise analysis
+    gpx_ref = outing_data.find("a", {"title": "Télécharger le fichier GPX pour votre GPS"})
+    if gpx_ref is not None:
+        gpx = requests.get(URL + "../" + gpx_ref["href"])
+        with open("temp.gpx", "w") as fout:
+            fout.write(gpx.text)
+        data["avg_lat"], data["avg_lon"], data["avg_alt"] = mean_coordinates("temp.gpx")
+        os.remove("temp.gpx")
+    else:
+        data["avg_lat"], data["avg_lon"], data["avg_alt"] = "", "", ""
 
     data["activity"] = activity.group(1)
 
@@ -157,7 +174,7 @@ def parse_starting_point(ref):
 def do_parsing(stride=200):
     """
     Launches the parsing of the entire website
-    :param stride: number of pages to store on each csv file (each page of the website contains 30 outings)
+    :param stride: number of pages to store on each csv file (each page of the website contains 50 outings)
     By default, stride=200
     :return:
     """
