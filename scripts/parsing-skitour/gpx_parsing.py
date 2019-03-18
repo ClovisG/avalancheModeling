@@ -4,12 +4,8 @@ Computes the mean coordinates of the gps trace
 """
 
 import logging  # For debugging information
-import sys
 
 import gpxpy
-
-# Comment or uncomment if you want debug information
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 def mean_coordinates(filename):
@@ -18,7 +14,7 @@ def mean_coordinates(filename):
     :param filename: .gpx file to be parsed
     :return:
     """
-    logging.info("file : {}".format(filename))
+    logging.debug("file : {}".format(filename))
 
     lat_mean = 0
     long_mean = 0
@@ -44,12 +40,13 @@ def mean_coordinates(filename):
                 logging.warning("{} segments found in the track".format(len(gpx.tracks[0].segments)))
 
         n = len(points)
-        logging.info("Number of points : {}".format(n))
+        logging.debug("Number of points : {}".format(n))
 
         for point in points:
             lat_mean += point.latitude
             long_mean += point.longitude
-            alt_mean += point.elevation
+            if point.elevation is not None:
+                alt_mean += point.elevation
 
         lat_mean /= n
         long_mean /= n

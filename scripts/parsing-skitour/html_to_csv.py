@@ -20,7 +20,7 @@ from gpx_parsing import *
 sys.setrecursionlimit(10000)
 
 # Comment or uncomment if you want debug information
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 # Adress where you can find the outings
 URL = 'http://www.skitour.fr/topos/dernieres-sorties/'
@@ -96,7 +96,7 @@ def parse_outing(ref, key_words):
     # Detection of avalanch activity
     topo_neige = soup.find("div", {"class": "neige_topo"}).getText()
     activity = re.search("Activité avalancheuse observée : (.*)Skiabilité", topo_neige)
-    if not (activity is not None and any(word in activity.group(1) for word in key_words)):
+    if not (activity is not None and any(len(re.findall(word, activity.group(1))) > 0 for word in key_words)):
         # if an avalanche activity is detected, do not parse.
         return None
 
@@ -122,11 +122,11 @@ def parse_outing(ref, key_words):
     # Starting gps coordinates
     link_to_location = outing_data.find("strong", text="Départ : ").findNext("a")
     coordinates = parse_starting_point(link_to_location["href"])
-    data["lat_depart"], data["lon_depart"] = coordinates
+    data["lat_depart"], data["long_depart"] = coordinates
 
     # Inclination
     inclination = outing_data.find("strong", text="Pente : ").nextSibling
-    data["pente"] = inclination
+    data["pente_max"] = max_inclination(inclination)
 
     # Average gps coordinates and altitude for more precise analysis
     gpx_ref = outing_data.find("a", {"title": "Télécharger le fichier GPX pour votre GPS"})
@@ -134,14 +134,27 @@ def parse_outing(ref, key_words):
         gpx = requests.get(URL + "../" + gpx_ref["href"])
         with open("temp.gpx", "w") as fout:
             fout.write(gpx.text)
-        data["avg_lat"], data["avg_lon"], data["avg_alt"] = mean_coordinates("temp.gpx")
+        data["avg_lat"], data["avg_long"], data["avg_alt"] = mean_coordinates("temp.gpx")
         os.remove("temp.gpx")
     else:
-        data["avg_lat"], data["avg_lon"], data["avg_alt"] = "", "", ""
+        data["avg_lat"], data["avg_long"], data["avg_alt"] = "", "", ""
 
     data["activity"] = activity.group(1)
 
     return data
+
+
+def max_inclination(user_input):
+    """
+    Computes the maximum inclination from a natural user input
+    :param user_input: text entered by a user about the inclination
+    :return: the maximum inclination
+    """
+    inclination = ""
+    matches = re.findall(r"([0-9]{2})(?![0-9]|m)[°\-/ ]?", user_input)
+    if len(matches) > 0:
+        inclination = max(int(x) for x in matches)
+    return inclination
 
 
 def parse_starting_point(ref):
@@ -179,6 +192,8 @@ def do_parsing(stride=200):
     :return:
     """
     n = find_last_page()
+    if stride == 0:
+        stride = n
 
     for j, i in enumerate(range(1, n, stride)):
         events = []
@@ -194,7 +209,7 @@ def do_parsing(stride=200):
             writer.writerows(events)
         logging.info("")
 
-    logging.info("Paring Done.")
+    logging.info("Parsing Done.")
 
 
-do_parsing()
+do_parsing(2)
