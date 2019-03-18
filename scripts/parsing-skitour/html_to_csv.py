@@ -7,8 +7,9 @@ Author : Théo Larue
 """
 
 import logging  # For debugging information
-import pickle
 import re  # Regular expressions)
+import pickle
+import csv
 import sys
 
 import requests  # Enables us to use html resquests
@@ -38,11 +39,11 @@ def find_last_page():
 
     n = int(soup.find("a", string="Suivante").findPrevious("a").text)
 
-    logging.debug("Number of pages : {}\n".format(n))
-    return 1
+    logging.info("Found {} pages to parse\n".format(n))
+    return n
 
 
-def parse_html(last_page, key_words, parsed_events):
+def parse_html(first_page, last_page, key_words, parsed_events):
     """
     Finds all the fields that represent a negative value (relative to avalanch activity) and
     parses the field into a list of dictionaries
@@ -51,12 +52,12 @@ def parse_html(last_page, key_words, parsed_events):
     because of the "rien" key word, which is not what we want to recognize.
 
     Arguments :
-            last_page : number of the last page of the website
+            first page, last_page : interval of pages to parse, last_page included
             key_words : the words used to determine if the activity was negative
             parsed_events : the list where the parsed events are to be stored
     """
     # There are a lot of pages, and on every page, a few ski outings to parse
-    for i in range(1, last_page + 1):
+    for i in range(first_page, last_page + 1):
         logging.info("Parsing page {} out of {}".format(i, last_page))
         req = requests.get("{}?lim=&p={}".format(URL, i))
         soup = BeautifulSoup(req.text, "lxml")
@@ -69,8 +70,6 @@ def parse_html(last_page, key_words, parsed_events):
             if event is not None:
                 parsed_events.append(event)
                 logging.debug(parsed_events[-1])
-            logging.info("Done.")
-
         logging.info("")
 
 
@@ -95,9 +94,7 @@ def parse_outing(ref, key_words):
     activity = re.search("Activité avalancheuse observée : (.*)Skiabilité", topo_neige)
     if not (activity is not None and any(word in activity.group(1) for word in key_words)):
         # if an avalanche activity is detected, do not parse.
-        logging.info("{} Ignored.".format(ref))
         return None
-    data["activity"] = activity.group(1)
 
     date = re.search("Sortie du (.*)par", soup.title.text).group(1)
     data["date"] = date
@@ -115,7 +112,6 @@ def parse_outing(ref, key_words):
         data["secteur"] = secteur.nextSibling
     else:
         data["secteur"] = ""
-        logging.info("No sector data for {}".format(ref))
 
     # Parsing of the gps coordinates
     link_to_location = outing_data.find("strong", text="Départ : ").findNext("a")
@@ -125,6 +121,8 @@ def parse_outing(ref, key_words):
     # Parsing of the inclination
     inclination = outing_data.find("strong", text="Pente : ").nextSibling
     data["pente"] = inclination
+
+    data["activity"] = activity.group(1)
 
     return data
 
@@ -152,16 +150,34 @@ def parse_starting_point(ref):
         lon = re.search(" / (.*) E", coordinates).group(1)
         logging.debug("Latitude : {}".format(lat))
         logging.debug("Longitude : {}".format(lon))
-    else:
-        logging.info("No coordinates for {}".format(ref))
 
     return lat, lon
 
 
-events = []
-parse_html(find_last_page(), negative_activity_key_words, events)
+def do_parsing(stride=200):
+    """
+    Launches the parsing of the entire website
+    :param stride: number of pages to store on each csv file (each page of the website contains 30 outings)
+    By default, stride=200
+    :return:
+    """
+    n = find_last_page()
 
-logging.info("Dumping the events in a pickle file...")
-with open("events.dict", 'wb') as fileout:
-    pickle.dump(events, fileout, protocol=pickle.HIGHEST_PROTOCOL)
-logging.info("Done.")
+    for j, i in enumerate(range(1, n, stride)):
+        events = []
+        start = i
+        end = min(i + stride - 1, n)
+        parse_html(start, end, negative_activity_key_words, events)
+
+        filename = "events{}".format(j)
+        logging.info("Dumping pages {} to {} into {}.csv...".format(start, end, filename))
+        with open("{}.csv".format(filename), "w") as file:
+            writer = csv.DictWriter(file, events[0].keys())
+            writer.writeheader()
+            writer.writerows(events)
+        logging.info("")
+
+    logging.info("Paring Done.")
+
+
+do_parsing()

@@ -3,39 +3,44 @@ Test script for quick gps parsing, in order to get the position of the slopes fr
 Computes the mean coordinates of the gps trace
 """
 
+import logging  # For debugging information
+import sys
+
 import gpxpy
-import logging, sys # For debugging information
 
 # Comment or uncomment if you want debug information
-logging.basicConfig(stream = sys.stderr, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-"""
-Computes the mean coordinates and elevation of the given .gpx file
-"""
+
 def mean_coordinates(filename):
+    """
+    Computes the mean coordinates and elevation of a .gpx file.
+    :param filename: .gpx file to be parsed
+    :return:
+    """
     logging.info("file : {}".format(filename))
 
     lat_mean = 0
     long_mean = 0
     alt_mean = 0
-    n = 0 # Number of points in the route
+    n = 0  # Number of points in the route
 
-    with open(filename,'r') as fin:
+    with open(filename, 'r') as fin:
         gpx = gpxpy.parse(fin)
         points = []
 
         routes_nb = len(gpx.routes)
-        if(routes_nb > 0):
+        if routes_nb > 0:
             points = gpx.routes[0].points
-            if(routes_nb > 1):
+            if routes_nb > 1:
                 logging.warning("{} routes found in the gpx file".format(routes_nb))
 
         tracks_nb = len(gpx.tracks)
-        if(tracks_nb > 0):
+        if tracks_nb > 0:
             points = gpx.tracks[0].segments[0].points
-            if(tracks_nb > 1):
+            if tracks_nb > 1:
                 logging.warning("{} tracks found in the gpx file".format(tracks_nb))
-            if(len(gpx.tracks[0].segments) > 1):
+            if len(gpx.tracks[0].segments) > 1:
                 logging.warning("{} segments found in the track".format(len(gpx.tracks[0].segments)))
 
         n = len(points)
@@ -52,6 +57,3 @@ def mean_coordinates(filename):
         logging.debug("Moyennes : lat {} long {} alt {}".format(lat_mean, long_mean, alt_mean))
 
         return lat_mean, long_mean, alt_mean
-
-mean_coordinates('test-single-rte.gpx')
-mean_coordinates('test-trk.gpx')
