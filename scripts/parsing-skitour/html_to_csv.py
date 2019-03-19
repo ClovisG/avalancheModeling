@@ -134,7 +134,11 @@ def parse_outing(ref, key_words):
         gpx = requests.get(URL + "../" + gpx_ref["href"])
         with open("temp.gpx", "w") as fout:
             fout.write(gpx.text)
-        data["avg_lat"], data["avg_long"], data["avg_alt"] = mean_coordinates("temp.gpx")
+        try:
+            # Sometimes gpx files are not in the right format
+            data["avg_lat"], data["avg_long"], data["avg_alt"] = mean_coordinates("temp.gpx")
+        except Exception:
+            pass
         os.remove("temp.gpx")
     else:
         data["avg_lat"], data["avg_long"], data["avg_alt"] = "", "", ""
@@ -184,24 +188,27 @@ def parse_starting_point(ref):
     return lat, lon
 
 
-def do_parsing(stride=200):
+def do_parsing(stride=200, first_page = 1, last_page = 0):
     """
     Launches the parsing of the entire website
     :param stride: number of pages to store on each csv file (each page of the website contains 50 outings)
     By default, stride=200
     :return:
     """
-    n = find_last_page()
-    if stride == 0:
-        stride = n
+    # Setting up
+    page_nbr = find_last_page()
+    if last_page <= 0 or last_page > page_nbr:
+        last_page = page_nbr
+    assert first_page <= last_page
+    assert stride > 0
 
-    for j, i in enumerate(range(1, n, stride)):
+    for i in range(first_page, last_page, stride):
         events = []
         start = i
-        end = min(i + stride - 1, n)
+        end = min(i + stride - 1, last_page)
         parse_html(start, end, negative_activity_key_words, events)
 
-        filename = "events{}".format(j)
+        filename = "events{}-{}".format(start, end)
         logging.info("Dumping pages {} to {} into {}.csv...".format(start, end, filename))
         with open("{}.csv".format(filename), "w") as file:
             writer = csv.DictWriter(file, events[0].keys())
@@ -212,4 +219,4 @@ def do_parsing(stride=200):
     logging.info("Parsing Done.")
 
 
-do_parsing(2)
+do_parsing(first_page = 1601)
