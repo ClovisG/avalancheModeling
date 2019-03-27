@@ -1,4 +1,5 @@
 .idea/*
 scripts/parsing-skitour/__pycache__/
 .vscode
+*.~lock.*
 
