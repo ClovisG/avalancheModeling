@@ -91,6 +91,8 @@ for i in range(270,275):
     print(day)
     print(month)
     print(year)
+    print(lon)
+    print(lat)
 
     area = N+'/'+W+'/'+S+'/'+E
     print(area)
@@ -100,6 +102,8 @@ for i in range(270,275):
     'reanalysis-era5-single-levels',
     {
         'product_type':'reanalysis',
+        'lat':lat,
+        'lon':lon,
         'area': area, # North, West, South, East. Default: global
         'format':'netcdf',
         'variable':[

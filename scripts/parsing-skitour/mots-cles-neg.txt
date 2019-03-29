@@ -1,13 +1,18 @@
 RAS
 ras
-néant
-pas d'activité
-nulle
-rien
-Rien
 Ras
-Nada
+néant
 Néant
 NEANT
+neant
+pas d'activité
+Pas d'activité
+nulle
+Nulle
+rien
+Rien
 RIEN
+Nada
+nada
 aucune
+Aucune
