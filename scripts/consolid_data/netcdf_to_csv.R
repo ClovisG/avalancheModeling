@@ -4,6 +4,7 @@ library(ncdf)
 
 
 # Build a data frame from a NetCDF and store the data frame like a csv file
+# Fonction de Ousmane, le script en dessous utilise une autre libraire
 nc_to_csv<-function(ncin) {
   names <- NULL
   long <-  var.get.nc(ncin, 0)
@@ -34,6 +35,11 @@ nc_to_csv<-function(ncin) {
 
 # open a netcdf file 
 #ncin <- open.nc("../data/forecast/adaptor.mars.internal-1552154124.7698312-30208-13-7fa26858-6")
+
+
+#################################################################################################
+
+
 setwd("Documents/2A/Avalanches/projet")
 library(ncdf4)
 nc <- nc_open("download/weather.nc")
