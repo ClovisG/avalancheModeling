@@ -15,8 +15,18 @@ try:
     _pdf_parsing_enabled = True
 except ImportError as e:
     print("Import error: " + str(e))
-    print("PDF PARDING DISABLED")
+    print("PDF PARSING DISABLED")
     _pdf_parsing_enabled = False
+
+try:
+    import xarray as xr
+    import netCDF4
+
+    _nc_parsing_enabled = True
+except ImportError as e:
+    print("Import error: " + str(e))
+    print("NC PARSING DISABLED")
+    _nc_parsing_enabled = False
 
 from pandas import DataFrame, read_csv, read_html, read_json
 
@@ -97,6 +107,12 @@ class DocumentParser:
         elif file_extension == ".dict":  # Pickling as a dict
             tables = self._parse_dict(path)
 
+        elif file_extension == ".nc":  # nc
+            if not _nc_parsing_enabled:
+                raise ParsingException(".nc file parsing disabled. Please install the required libraries.")
+
+            tables = {path: xr.open_dataset(path).to_dataframe()}
+
         else:
             raise ParsingException("Unknown file extension: \"" + file_extension + "\"")
 
@@ -139,7 +155,7 @@ class DocumentParser:
         """
         # Is the pdf file parsing enabled?
         if not _pdf_parsing_enabled:
-            raise ParsingException("Trying to parse a pdf file, while this kind of parsing is disabled.")
+            raise ParsingException(".pdf file parsing disabled. Please install the required libraries.")
 
         # We open the pdf file with PyPDF2 to get the number of pages
         with open(path, 'rb') as f:

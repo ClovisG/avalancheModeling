@@ -265,17 +265,17 @@ class DataPrettifier:
 
             # Depots
             # We can either have nothing, an int or a float
-            for index in range(7, 10):
+            for i in range(7, 10):
                 # Do we have a float?
-                if re.match("[0-9]+\.[0-9]+", row[index]):
-                    pretty_row.append(float(row[index]))
+                if re.match("[0-9]+\.[0-9]+", row[i]):
+                    pretty_row.append(float(row[i]))
                 # Or else we have an optional int
                 else:
-                    pretty_row.append(optional_int_conv(row[index]))
+                    pretty_row.append(optional_int_conv(row[i]))
 
             # Caracteristiques
-            for index in range(10, 16):
-                pretty_row.append(optional_int_conv(row[index]))
+            for i in range(10, 16):
+                pretty_row.append(optional_int_conv(row[i]))
 
             # Meteo 3 jours precedents
             # We can either have nothing, 0 or a range  # hauteur de neige
@@ -285,7 +285,7 @@ class DataPrettifier:
                 pretty_row.append(int(start))
                 pretty_row.append(int(end))
             # Do we have '>100'?
-            if row[16] == '>100':
+            elif row[16] == '>100':
                 pretty_row.append(100)
                 pretty_row.append("")
             # Or else we have an optional int
@@ -301,8 +301,8 @@ class DataPrettifier:
             pretty_row.append(checkable_conv(row[20]))  # pluie
 
             # Meteo 4h precedentes + Causes (checkable conv)
-            for index in range(21, 31):
-                pretty_row.append(checkable_conv(row[index]))
+            for i in range(21, 31):
+                pretty_row.append(checkable_conv(row[i]))
 
             # Victimes
             pretty_row.append(checkable_conv(row[31]))  # néant
@@ -310,8 +310,8 @@ class DataPrettifier:
             pretty_row.append(optional_int_conv(row[33]))  # morts
 
             # Degats ou lieux atteints
-            for index in range(34, 40):
-                pretty_row.append(checkable_conv(row[index]))
+            for i in range(34, 40):
+                pretty_row.append(checkable_conv(row[i]))
 
             # Obs
             # This field probably will not be used, but we will include it anyway

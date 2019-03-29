@@ -6,6 +6,14 @@ Author : Antoine SANNER
 from pandas import DataFrame
 import pickle
 
+try:
+    import xarray as xr
+    import netCDF4
+
+    _nc_export_enabled = True
+except ImportError as e:
+    _nc_export_enabled = False
+
 
 class DataFrameExporter:
     @staticmethod
@@ -56,6 +64,14 @@ class DataFrameExporter:
             json_string = df.to_json(**kw)
             with open(path, 'w') as f:
                 f.write(json_string)
+
+        elif f == "nc":
+            if not _nc_export_enabled:
+                raise Exception(".nc file export disabled. Please install the required libraries.")
+
+            ds = df.to_xarray()
+            ds = ds.rename({name: str(name) for name in ds.variables})
+            ds.to_netcdf(path)
 
         else:
             # Unknown type

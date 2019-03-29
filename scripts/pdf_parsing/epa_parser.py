@@ -9,6 +9,7 @@ import traceback
 
 from core import *
 
+
 # Parser setup
 parser = argparse.ArgumentParser(prog="EPA Document Parser",
                                  description="Command line interface for the EPA Document parsing library. "
@@ -19,7 +20,7 @@ parser.add_argument('-i', '--input', action='store', nargs='+', type=str, requir
                     help="A list of files to parse.", dest="input_files")
 # Output format
 parser.add_argument('-f', '--format', action='store', type=str, default="csv",
-                    choices=["csv", "dataframe", "dict", "html", "json"],
+                    choices=["csv", "dataframe", "dict", "html", "json", "nc"],
                     help="The file format of the output. "
                          "The name of the output files will be the same as the name of the input file "
                          "(minus its extension).",
@@ -30,6 +31,13 @@ parser.add_argument('-v', '--verbose', action='store_true', help="Makes the pars
 parser.add_argument('-e', '--ignore-exceptions', action='store_true',
                     help="Ignores a file if an exception is raised rather than exiting the whole program.",
                     dest="ignore_exceptions")
+# Bind gps coordinates
+parser.add_argument('-b', '--bind-gps', action='store_true',
+                    help="Binds the gps coordinates to the dataset. "
+                         "ATTENTION! the dataset obtained will not be usable anymore for any prettifying. "
+                         "And the file's name must follow the same name rule as the PDFs. "
+                         "This might be fixed in the future.",
+                    dest="bind_gps")
 
 # Mutually exclusive options
 exclusive_group = parser.add_mutually_exclusive_group()
@@ -69,12 +77,40 @@ tables = {}
 prettifier = DataPrettifier()
 doc_parser = DocumentParser(verbose=args.verbose, no_check=args.no_check)
 
+
+# Importing data for the binding
+cities_not_found = set()
+gps_coords = {}
+if args.bind_gps:
+    with open("./core/insee_to_gps_coords.dict", 'rb') as f:
+        gps_coords = pickle.load(f)
+
+
 # Handling the data
 for path in args.input_files:
     path = os.path.abspath(path)
     try:
         # Parsing
         tables_in_file = doc_parser.parse(path)
+
+        # Binding info search
+        if args.bind_gps:
+            insee = re.findall("EPA_ListeEvts_([0-9]+)_.*", path)
+            # City name not found in path
+            if not insee:
+                print("City not found in file: " + path)
+                if not args.ignore_exceptions:
+                    exit(1)
+            insee = insee[0]
+
+            # City name not found in data
+            if not insee in cities_not_found and not insee in gps_coords:
+                cities_not_found.add(insee)
+                print("Insee number " + insee + " is missing from the database.")
+                if not args.ignore_exceptions:
+                    exit(1)
+        else:
+            insee = ''
 
         # Keeping events only - Checking their format - Prettifying
         if not args.no_check:
@@ -89,6 +125,12 @@ for path in args.input_files:
                     # Prettifying
                     if args.prettify:
                         new_table = prettifier.prettify(new_table)
+
+                    # Binding
+                    if insee:
+                        lat, long = gps_coords[insee]
+                        new_table['Latitude'] = lat
+                        new_table['Longitude'] = long
 
                     tables_in_file[path] = new_table
 
