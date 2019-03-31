@@ -6,8 +6,46 @@ setwd("~/2A_cours/Avanlaches/scripts/")
 
 ##########################################################
 # EPA
-#epa.raw = read.csv("../data/epa/epa.csv")
+epa.raw = read.csv("../data/epa/epa.csv")
 
+# keeping only the usefull predictors
+epa.names2keep = c("date1", "Longitude", "Latitude")
+epa.reduced = subset(epa.raw, select = epa.names2keep)
+epa.reduced = epa.reduced[epa.reduced$date != "",]
+epa.reduced = cbind(factor(rep(NA, dim(epa.reduced)[1])), epa.reduced)
+
+# marking the positiveness of those events
+epa.reduced = cbind(factor(rep(1, dim(epa.reduced)[1])), epa.reduced)
+names(epa.reduced) = c("avalanche", "orientation", "date", "long", "lat")
+
+convert_date_epa = function(old.date.string){
+  old.date = strsplit(old.date.string, "/")[[1]]
+  
+  day = old.date[1]
+  month = old.date[2]
+  year = substr(old.date[3], start = 1, stop = 2)
+  
+  if (as.numeric(year) <= 19){
+    year = paste("20", year, sep="")
+  }
+  else{
+    year = paste("19", year, sep="")
+  }
+      
+  new.date.string = paste(month, day, year, sep="/")
+  
+  return(new.date.string)
+}
+
+new.dates = c()
+for (i in 1:dim(epa.reduced)[1]){
+  new.dates[i] = convert_date_epa(
+    as.character(
+      (epa.reduced$date)[i]
+    )
+  )
+}
+epa.reduced$date = new.dates
 
 ##########################################################
 # EPA Belledone
@@ -25,7 +63,7 @@ datavalanche.reduced = subset(datavalanche.raw, select = datavalanche.names2keep
 # marking the psoitiveness of those events
 datavalanche.reduced = cbind(factor(rep(1, dim(datavalanche.reduced)[1])), datavalanche.reduced)
 names(datavalanche.reduced) = c("avalanche", "orientation", "date", "long", "lat")
-  
+
 convert_date_datavalanche = function(old.date.string){
   old.date = strsplit(old.date.string, "/")[[1]]
   
@@ -88,10 +126,10 @@ skitour.reduced$date = new.dates
 #Only from October 1st to April 30
 skitour.reduced = skitour.reduced[(substr(skitour.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
 
-global.data = rbind(skitour.reduced, datavalanche.reduced)
+global.data = rbind(skitour.reduced, datavalanche.reduced, epa.reduced)
 
 #At last do not keep events which aren't from the alps
-global.data = na.omit(global.data) # delete the line with NA
+#global.data = na.omit(global.data) # delete the line with NA
 
 #Rewrite code
 for (i in 1:dim(global.data)[1]){
@@ -106,5 +144,6 @@ global.data = global.data[-which(global.data$orientation=='T'),] # delete the wi
 global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
 
 write.csv(global.data, "../data/all_data.csv")
-sum(global.data$avalanche == 0)
+cat("number of negative events : ", sum(global.data$avalanche == 0))
+cat("number of positive events : ", sum(global.data$avalanche == 1))
 
