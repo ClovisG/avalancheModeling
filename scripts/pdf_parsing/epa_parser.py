@@ -161,7 +161,7 @@ if args.merge_dest:
     if table_iter is not None:
         for table in table_iter:
             # Prettiness check
-            if not get_dataframe_prettiness(table) != new_tables_prettiness:
+            if get_dataframe_prettiness(table) != new_tables_prettiness:
                 print("Error: one of the tables to be merged is less pretty than the others:")
                 exit(1)
 
