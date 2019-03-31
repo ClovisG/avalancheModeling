@@ -11,12 +11,12 @@ setwd(this.dir)
 
 ##########################################################
 # EPA Belledone
-epa.belledone.raw = read.csv("../data/epa/epa_belledone.csv")
+epa.belledone.raw = read.csv("data/epa/epa_belledone.csv")
 
 
 ##########################################################
 # Datavalanche
-datavalanche.raw = read.csv("../data/datavalanche/datavalanche.csv")
+datavalanche.raw = read.csv("data/datavalanche/datavalanche.csv")
 
 # keeping only the usefull predictors
 datavalanche.names2keep = c("Orientation", "Date", "longitude", "latitude")
@@ -53,7 +53,7 @@ datavalanche.reduced$date = new.dates
 ##########################################################
 # Skitour
 
-skitour.raw = read.csv("../data/skitour/skitour.csv")
+skitour.raw = read.csv("data/skitour/skitour.csv")
 skitour.names2keep = c("orientation", "date", "long_depart", "lat_depart")
 skitour.reduced = subset(skitour.raw, select = skitour.names2keep)
 
@@ -86,7 +86,13 @@ for (i in 1:dim(skitour.reduced)[1]){
 skitour.reduced$date = new.dates
 
 #Only from October 1st to April 30
-skitour.reduced <- skitour.reduced[skitour.reduced$date %in% c("10","11","12","01","02","03","04")]
+skitour.reduced = skitour.reduced[(substr(skitour.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
+
+# for (i in 1:dim(skitour.reduced)){
+#   if (!substr(skitour.reduced$date[i], start=1, stop=2) %in% c("10","11","12","01","02","03","04")){
+#     skitour.reduced<-skitour.reduced[c(-i),]
+#   }
+# }
 
 global.data = rbind(skitour.reduced, datavalanche.reduced)
 
@@ -95,13 +101,11 @@ global.data = rbind(skitour.reduced, datavalanche.reduced)
 for (i in 1:dim(global.data)[1]){
   lon = global.data[i,4]
   lat = global.data[i,5]
-  if (lon>13.75 || lon<5.25 || is.na(lon)){
-    global.data<-global.data[c(-i),]
-  }
-  else if (lat>49.25 || lat<40.5 || is.na(lat)){
+  if (is.na(lon) || is.na(lat) || lon==0 || lat==0 || !(lon<13.75 && lon>5.25) || !(lat<49.25 && lat>40.5)) {
     global.data<-global.data[c(-i),]
   }
 }
 
-write.csv(global.data, "../data/all_data.csv")
+write.csv(global.data, "data/all_data.csv")
 sum(global.data$avalanche == 0)
+
