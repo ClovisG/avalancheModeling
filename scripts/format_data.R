@@ -6,8 +6,45 @@ setwd("~/2A_cours/Avanlaches/scripts/")
 
 ##########################################################
 # EPA
-#epa.raw = read.csv("../data/epa/epa.csv")
+epa.raw = read.csv("../data/epa/epa.csv")
 
+# keeping only the usefull predictors
+epa.names2keep = c("date1", "Longitude", "Latitude")
+epa.reduced = subset(epa.raw, select = epa.names2keep)
+epa.reduced = epa.reduced[epa.reduced$date != "",]
+
+# marking the positiveness of those events
+epa.reduced = cbind(factor(rep(1, dim(epa.reduced)[1])), epa.reduced)
+names(epa.reduced) = c("avalanche", "date", "long", "lat")
+
+convert_date_epa = function(old.date.string){
+  old.date = strsplit(old.date.string, "/")[[1]]
+  
+  day = old.date[1]
+  month = old.date[2]
+  year = substr(old.date[3], start = 1, stop = 2)
+  
+  if (as.numeric(year) <= 19){
+    year = paste("20", year, sep="")
+  }
+  else{
+    year = paste("19", year, sep="")
+  }
+      
+  new.date.string = paste(month, day, year, sep="/")
+  
+  return(new.date.string)
+}
+
+new.dates = c()
+for (i in 1:dim(epa.reduced)[1]){
+  new.dates[i] = convert_date_epa(
+    as.character(
+      (epa.reduced$date)[i]
+    )
+  )
+}
+epa.reduced$date = new.dates
 
 ##########################################################
 # EPA Belledone
@@ -25,7 +62,7 @@ datavalanche.reduced = subset(datavalanche.raw, select = datavalanche.names2keep
 # marking the psoitiveness of those events
 datavalanche.reduced = cbind(factor(rep(1, dim(datavalanche.reduced)[1])), datavalanche.reduced)
 names(datavalanche.reduced) = c("avalanche", "orientation", "date", "long", "lat")
-  
+
 convert_date_datavalanche = function(old.date.string){
   old.date = strsplit(old.date.string, "/")[[1]]
   
@@ -109,5 +146,6 @@ for (i in 1:dim(global.data)[1]){
 }
 
 write.csv(global.data, "../data/all_data.csv")
-sum(global.data$avalanche == 0)
+cat("number of negative events : ", sum(global.data$avalanche == 0))
+cat("number of positive events : ", sum(global.data$avalanche == 1))
 
