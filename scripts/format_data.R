@@ -88,25 +88,22 @@ skitour.reduced$date = new.dates
 #Only from October 1st to April 30
 skitour.reduced = skitour.reduced[(substr(skitour.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
 
-# for (i in 1:dim(skitour.reduced)){
-#   if (!substr(skitour.reduced$date[i], start=1, stop=2) %in% c("10","11","12","01","02","03","04")){
-#     skitour.reduced<-skitour.reduced[c(-i),]
-#   }
-# }
-
 global.data = rbind(skitour.reduced, datavalanche.reduced)
 
 #At last do not keep events which aren't from the alps
-#Rewrite code
 global.data = na.omit(global.data) # delete the line with NA
-global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
+
+#Rewrite code
 for (i in 1:dim(global.data)[1]){
   lon = global.data[i,4]
   lat = global.data[i,5]
-  if (!(lon<13.75 && lon>5.25) || !(lat<49.25 && lat>40.5)) {
+  if (!(lon<13.75 && lon>5.25) || !(lat<49.25 && lat>40.5) || is.na(lon) || is.na(lat)) {
     global.data<-global.data[c(-i),]
   }
 }
+
+global.data = global.data[-which(global.data$orientation=='T'),] # delete the with 0 in long (lat also)
+global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
 
 write.csv(global.data, "../data/all_data.csv")
 sum(global.data$avalanche == 0)
