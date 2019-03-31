@@ -85,10 +85,23 @@ for (i in 1:dim(skitour.reduced)[1]){
 }
 skitour.reduced$date = new.dates
 
-
-
+#Only from October 1st to April 30
+skitour.reduced <- skitour.reduced[skitour.reduced$date %in% c("10","11","12","01","02","03","04")]
 
 global.data = rbind(skitour.reduced, datavalanche.reduced)
+
+#At last do not keep events which aren't from the alps
+#Rewrite code
+for (i in 1:dim(global.data)[1]){
+  lon = global.data[i,4]
+  lat = global.data[i,5]
+  if (lon>13.75 || lon<5.25 || is.na(lon)){
+    global.data<-global.data[c(-i),]
+  }
+  else if (lat>49.25 || lat<40.5 || is.na(lat)){
+    global.data<-global.data[c(-i),]
+  }
+}
 
 write.csv(global.data, "../data/all_data.csv")
 sum(global.data$avalanche == 0)

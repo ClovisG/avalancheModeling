@@ -69,19 +69,19 @@ writeCsv<-function(df){
   write.table(na.omit(df),csvfile, sep=", ",row.names=FALSE)
 }
 
-getDataframe<-function(var, time, lon, lat){
+getDataframe<-function(var, time, lon, lat, nlon, nlat){
   # get var
   var_array <- ncvar_get(nc,var)
   varlname <- ncatt_get(nc,var,"long_name")
   dunits <- ncatt_get(nc,var,"units")
   fillvalue <- ncatt_get(nc,var,"_FillValue")
-  dim(t2m_array) #lon*lat*time
+  #dim(t2m_array) #lon*lat*time
   
   nt<- dim(time)
   head(time)
   
   # replace netCDF fill values with NA's
-  var_array[t2m_array==fillvalue$value] <- NA
+  var_array[var_array==fillvalue$value] <- NA
   
   length(na.omit(as.vector(var_array[,,1])))
   
@@ -96,7 +96,7 @@ getDataframe<-function(var, time, lon, lat){
   
   # create a dataframe
   lonlat <- as.matrix(expand.grid(lon,lat))
-  var_df <- data.frame(cbind(lonlat,t2m_mat))
+  var_df <- data.frame(cbind(lonlat,var_mat))
   
   return (var_df)
 }
@@ -143,13 +143,13 @@ getFrames<-function(){
   nt<- dim(time)
   head(time)
   
-  t2m_df = getDataframe(t2m, time, lon, lat)
-  cdir_df = getDataframe(cdir, time, lon, lat)
-  lsp_df = getDataframe(lsp, time, lon, lat)
-  lsf_df = getDataframe(lsf, time, lon, lat)
-  rsn_df = getDataframe(rsn, time, lon, lat)
-  sd_df = getDataframe(sd, time, lon, lat)
-  smlt_df = getDataframe(smlt, time, lon, lat)
+  t2m_df = getDataframe(t2m, time, lon, lat, nlon, nlat)
+  cdir_df = getDataframe(cdir, time, lon, lat, nlon, nlat)
+  lsp_df = getDataframe(lsp, time, lon, lat, nlon, nlat)
+  lsf_df = getDataframe(lsf, time, lon, lat, nlon, nlat)
+  rsn_df = getDataframe(rsn, time, lon, lat, nlon, nlat)
+  sd_df = getDataframe(sd, time, lon, lat, nlon, nlat)
+  smlt_df = getDataframe(smlt, time, lon, lat, nlon, nlat)
 
   return (list("t2m"=t2m_df,"cdir"=cdir_df,"lsp"=lsp_df,"lsf"=lsf_df,"rsn"=rsn_df,"sd"=sd_df,"smlt"=smlt_df))
 }
