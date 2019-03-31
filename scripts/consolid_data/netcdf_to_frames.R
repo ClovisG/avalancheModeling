@@ -55,6 +55,27 @@ getData<-function(lon, lat, day, df){
   df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,days+3]
 }
 
+#Function that returns the values for the variables during the last nb.days prior to argument date
+lastDays<-function(nb.days,lon,lat,day,df){
+  start = getNbDays(dates(day)-nb.days)
+  if (start<0){
+    start = 1
+  }
+  end = getNbDays(day)
+  return(df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,start+2:(end+3)])
+}
+
+#Function that returns the values for the variables during the last nb.months prior to argument date
+monthsMeans<-function(nb.months,lon,lat,day,df){
+  start = getNbDays(dates(day)-nb.months*28)
+  if (start<0){
+    start = 1
+  }
+  end = getNbDays(day)
+  values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,start+2:(end+3)]
+  return(apply(values,1,mean))
+}
+
 #format: "month/day/year"
 getNbDays<-function(date){
   return (dates(c(date))-dates(c("01/01/1991")))
@@ -157,4 +178,7 @@ getFrames<-function(){
 frames=getFrames()
 
 t2m_df=frames$t2m
+
 getData(8,49,"01/03/1991",t2m_df)
+monthsMeans(3,8,49,"01/03/1991",t2m_df)
+lastDays(2,8,49,"01/03/1991",t2m_df)
