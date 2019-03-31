@@ -12,10 +12,11 @@ epa.raw = read.csv("../data/epa/epa.csv")
 epa.names2keep = c("date1", "Longitude", "Latitude")
 epa.reduced = subset(epa.raw, select = epa.names2keep)
 epa.reduced = epa.reduced[epa.reduced$date != "",]
+epa.reduced = cbind(factor(rep(NA, dim(epa.reduced)[1])), epa.reduced)
 
 # marking the positiveness of those events
 epa.reduced = cbind(factor(rep(1, dim(epa.reduced)[1])), epa.reduced)
-names(epa.reduced) = c("avalanche", "date", "long", "lat")
+names(epa.reduced) = c("avalanche", "orientation", "date", "long", "lat")
 
 convert_date_epa = function(old.date.string){
   old.date = strsplit(old.date.string, "/")[[1]]
@@ -125,10 +126,10 @@ skitour.reduced$date = new.dates
 #Only from October 1st to April 30
 skitour.reduced = skitour.reduced[(substr(skitour.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
 
-global.data = rbind(skitour.reduced, datavalanche.reduced)
+global.data = rbind(skitour.reduced, datavalanche.reduced, epa.reduced)
 
 #At last do not keep events which aren't from the alps
-global.data = na.omit(global.data) # delete the line with NA
+#global.data = na.omit(global.data) # delete the line with NA
 
 #Rewrite code
 for (i in 1:dim(global.data)[1]){
