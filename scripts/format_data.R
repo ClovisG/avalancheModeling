@@ -1,5 +1,5 @@
-this.dir <- dirname(parent.frame(2)$ofile)
-setwd(this.dir)
+#this.dir <- dirname(parent.frame(2)$ofile)
+setwd("~/2A_cours/Avanlaches/scripts/")
 
 # Data collection
 
@@ -11,12 +11,12 @@ setwd(this.dir)
 
 ##########################################################
 # EPA Belledone
-epa.belledone.raw = read.csv("data/epa/epa_belledone.csv")
+epa.belledone.raw = read.csv("../data/epa/epa_belledone.csv")
 
 
 ##########################################################
 # Datavalanche
-datavalanche.raw = read.csv("data/datavalanche/datavalanche.csv")
+datavalanche.raw = read.csv("../data/datavalanche/datavalanche.csv")
 
 # keeping only the usefull predictors
 datavalanche.names2keep = c("Orientation", "Date", "longitude", "latitude")
@@ -53,7 +53,7 @@ datavalanche.reduced$date = new.dates
 ##########################################################
 # Skitour
 
-skitour.raw = read.csv("data/skitour/skitour.csv")
+skitour.raw = read.csv("../data/skitour/skitour.csv")
 skitour.names2keep = c("orientation", "date", "long_depart", "lat_depart")
 skitour.reduced = subset(skitour.raw, select = skitour.names2keep)
 
@@ -98,14 +98,16 @@ global.data = rbind(skitour.reduced, datavalanche.reduced)
 
 #At last do not keep events which aren't from the alps
 #Rewrite code
+global.data = na.omit(global.data) # delete the line with NA
+global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
 for (i in 1:dim(global.data)[1]){
   lon = global.data[i,4]
   lat = global.data[i,5]
-  if (is.na(lon) || is.na(lat) || lon==0 || lat==0 || !(lon<13.75 && lon>5.25) || !(lat<49.25 && lat>40.5)) {
+  if (!(lon<13.75 && lon>5.25) || !(lat<49.25 && lat>40.5)) {
     global.data<-global.data[c(-i),]
   }
 }
 
-write.csv(global.data, "data/all_data.csv")
+write.csv(global.data, "../data/all_data.csv")
 sum(global.data$avalanche == 0)
 
