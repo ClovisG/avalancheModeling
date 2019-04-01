@@ -52,34 +52,59 @@ getData<-function(lon, lat, day, df){
   if(days < 1 || days > 5943){
     cat("Error: date out of range \n")
   }
-  df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,days+3]
+  df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,days+2]
 }
 
 #Function that returns the values for the variables during the last nb.days prior to argument date
+#Coordinates have to be rounded !
 lastDays<-function(nb.days,lon,lat,day,df){
-  start = getNbDays(dates(day)-nb.days)
+  start = as.integer(getNbDays(dates(day)-nb.days))
   if (start<0){
     start = 1
   }
-  end = getNbDays(day)
-  return(df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,start+2:(end+3)])
+  end = as.integer(getNbDays(day))
+  return(df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)])
 }
 
 #Function that returns the values for the variables during the last nb.months prior to argument date
+#Coordinates have to be rounded ! 
 monthsMeans<-function(nb.months,lon,lat,day,df){
-  start = getNbDays(dates(day)-nb.months*28)
+  start = as.integer(getNbDays(dates(day)-nb.months*28))
   if (start<0){
     start = 1
   }
-  end = getNbDays(day)
-  values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,start+2:(end+3)]
+  end = as.integer(getNbDays(dates(day)))
+  if (end>getNbDays(dates("04/30/2018")+2)){
+    cat("Error: data non available \n")
+  }
+
+  values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)]
   return(apply(values,1,mean))
 }
 
 #format: "month/day/year"
+#Much more complicated because we gave gaps in our data so we have to count these gaps...
+#TODO 
 getNbDays<-function(date){
-  return (dates(c(date))-dates(c("01/01/1991")))
+  #We have to substract the number of days between 10/01/xx and 30/04/xx per year
+  const = 154
+  end = dates(date)
+  start = dates("01/01/1991")
+  years = as.integer((end-start)%/%365)
+  return (end-(start+years*const))
 }
+
+#Round coordinates for the grid
+roundCoord<-function(coord){
+  # Integer part
+  integer = coord%/%1
+  # 2 decimals truncature
+  decimals = ((coord-integer)*100)%/%1
+  # Convertion into a grid element
+  decimals = round(decimals/25)*0.25
+  return(integer+decimals)
+}
+
 
 writeCsv<-function(df){
   # write out the dataframe as a .csv file
@@ -90,7 +115,7 @@ writeCsv<-function(df){
   write.table(na.omit(df),csvfile, sep=", ",row.names=FALSE)
 }
 
-getDataframe<-function(var, time, lon, lat, nlon, nlat){
+getDataframe<-function(nc, var, time, lon, lat, nlon, nlat){
   # get var
   var_array <- ncvar_get(nc,var)
   varlname <- ncatt_get(nc,var,"long_name")
@@ -123,13 +148,13 @@ getDataframe<-function(var, time, lon, lat, nlon, nlat){
 }
 
 getFrames<-function(){
-  #setwd("Documents/2A/Avalanches/projet")
+  cat("Please set your working directory to 'scripts' \n")
   # load some packages
   library(chron)
   library(lattice)
   library(RColorBrewer)
   library(ncdf4)
-  nc <- nc_open("download/weather.nc")
+  nc <- nc_open("../download/weather.nc")
   print(nc)
   
   # Variables
@@ -164,13 +189,13 @@ getFrames<-function(){
   nt<- dim(time)
   head(time)
   
-  t2m_df = getDataframe(t2m, time, lon, lat, nlon, nlat)
-  cdir_df = getDataframe(cdir, time, lon, lat, nlon, nlat)
-  lsp_df = getDataframe(lsp, time, lon, lat, nlon, nlat)
-  lsf_df = getDataframe(lsf, time, lon, lat, nlon, nlat)
-  rsn_df = getDataframe(rsn, time, lon, lat, nlon, nlat)
-  sd_df = getDataframe(sd, time, lon, lat, nlon, nlat)
-  smlt_df = getDataframe(smlt, time, lon, lat, nlon, nlat)
+  t2m_df = getDataframe(nc, t2m, time, lon, lat, nlon, nlat)
+  cdir_df = getDataframe(nc, cdir, time, lon, lat, nlon, nlat)
+  lsp_df = getDataframe(nc, lsp, time, lon, lat, nlon, nlat)
+  lsf_df = getDataframe(nc, lsf, time, lon, lat, nlon, nlat)
+  rsn_df = getDataframe(nc, rsn, time, lon, lat, nlon, nlat)
+  sd_df = getDataframe(nc, sd, time, lon, lat, nlon, nlat)
+  smlt_df = getDataframe(nc, smlt, time, lon, lat, nlon, nlat)
 
   return (list("t2m"=t2m_df,"cdir"=cdir_df,"lsp"=lsp_df,"lsf"=lsf_df,"rsn"=rsn_df,"sd"=sd_df,"smlt"=smlt_df))
 }
@@ -180,5 +205,10 @@ frames=getFrames()
 t2m_df=frames$t2m
 
 getData(8,49,"01/03/1991",t2m_df)
-monthsMeans(3,8,49,"01/03/1991",t2m_df)
 lastDays(2,8,49,"01/03/1991",t2m_df)
+lastDays(2,8,49,"04/30/2018",t2m_df)
+
+
+monthsMeans(3,8,49,"01/03/1991",t2m_df)
+monthsMeans(3,8,49,"04/30/2005",t2m_df)
+monthsMeans(3,7,45.75,"04/30/2018",t2m_df)
