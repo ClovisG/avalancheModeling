@@ -63,7 +63,27 @@ lastDays<-function(nb.days,lon,lat,day,df){
     start = 1
   }
   end = as.integer(getNbDays(day))
+  if (end>getNbDays(dates("04/30/2018")+2)){
+    cat("Error: data for ",day, " non available \n")
+    return(NULL)
+  }
   return(df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)])
+}
+
+#Function that returns the values for the variables during the last nb.days prior to argument date
+#Coordinates have to be rounded ! 
+daysMeans<-function(nb.days,lon,lat,day,df){
+  start = as.integer(getNbDays(dates(day)-nb.days))
+  if (start<0){
+    start = 1
+  }
+  end = as.integer(getNbDays(day))
+  if (end>getNbDays(dates("04/30/2018")+2)){
+    cat("Error: data for ",day, " non available \n")
+    return(NULL)
+  }
+  values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)]
+  return(apply(values,1,mean))
 }
 
 #Function that returns the values for the variables during the last nb.months prior to argument date
@@ -75,9 +95,9 @@ monthsMeans<-function(nb.months,lon,lat,day,df){
   }
   end = as.integer(getNbDays(dates(day)))
   if (end>getNbDays(dates("04/30/2018")+2)){
-    cat("Error: data non available \n")
+    cat("Error: data for ",day, " non available \n")
+    return(NULL)
   }
-
   values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)]
   return(apply(values,1,mean))
 }
