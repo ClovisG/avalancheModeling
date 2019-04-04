@@ -207,6 +207,8 @@ def do_parsing(stride=200, first_page = 1, last_page = 0):
         start = i
         end = min(i + stride - 1, last_page)
         parse_html(start, end, negative_activity_key_words, events)
+        if len(events) == 0:
+            continue
 
         filename = "events{}-{}".format(start, end)
         logging.info("Dumping pages {} to {} into {}.csv...".format(start, end, filename))
