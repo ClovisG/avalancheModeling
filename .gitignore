@@ -1,5 +1,6 @@
 .idea/*
-scripts/parsing-skitour/__pycache__/
+scripts/parsing-skitour/__pycache__/*
 .vscode
 *.~lock.*
 *.Rhistory
+scripts/__pycache__/*
