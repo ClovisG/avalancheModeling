@@ -40,13 +40,13 @@
 #Get a data depending on (lon,lat,day)
 #format: "month/day/year"
 getData<-function(lon, lat, day, df){
-  if (lon>13.75 || lon<5.25){
-    cat("Error: longitude out of range \n")
-    break;
+  if (lon>13.75 || lon<5.25 || is.na(lon)){
+    cat("Error: longitude ",lon," out of range \n")
+    return(NULL);
   }
-  if (lat>49.25 || lat<40.5){
-    cat("Error: latitude out of range \n")
-    break;
+  if (lat>49.25 || lat<40.5 || is.na(lat)){
+    cat("Error: latitude ",lat," out of range \n")
+    return(NULL)
   }
   days = getNbDays(day)
   if(days < 1 || days > 5943){
@@ -73,6 +73,7 @@ lastDays<-function(nb.days,lon,lat,day,df){
 #Function that returns the values for the variables during the last nb.days prior to argument date
 #Coordinates have to be rounded ! 
 daysMeans<-function(nb.days,lon,lat,day,df){
+  #print(day)
   start = as.integer(getNbDays(dates(day)-nb.days))
   if (start<0){
     start = 1
@@ -85,7 +86,6 @@ daysMeans<-function(nb.days,lon,lat,day,df){
   if (end<0 || end == start){
     return(NULL)
   }
-  #print(day)
   #cat("start = ",start,"\n")
   #cat("end = ",end,"\n")
   values = df[16*(13.75-5)*(49.25-lat)+4*(lon-5.25)+1,(start+2):(end+2)]
@@ -105,7 +105,7 @@ monthsMeans<-function(nb.months,lon,lat,day,df){
     #cat("Error: data for ",day, " non available \n")
     return(NULL)
   }
-  if (end<0){
+  if (end<0 || end<=start){
     return(NULL)
   }
   #cat("start = ",start,"\n")
@@ -306,6 +306,7 @@ get_t2m<-function(nc){
   
 
 frames=getFrames()
+lsp_df = frames$lsp
 
 cdir_df = frames$cdir
 

@@ -125,11 +125,26 @@ skitour.reduced$date = new.dates
 
 #Only from October 1st to April 30
 skitour.reduced = skitour.reduced[(substr(skitour.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
+epa.reduced = epa.reduced[(substr(epa.reduced$date, 1, 2) %in% c("10","11","12","01","02","03","04")),] ##doesn't work
+
 
 global.data = rbind(skitour.reduced, datavalanche.reduced, epa.reduced)
 
 #At last do not keep events which aren't from the alps
 #global.data = na.omit(global.data) # delete the line with NA
+
+global.data = global.data[(substr(global.data$date, 1, 2) %in% c("10","11","12","01","02","03","04")),]
+
+global.data = global.data[-which(global.data$orientation=='T'),] # delete the with 0 in long (lat also)
+global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
+#global.data = global.data[-which(global.data$lat==0),] # delete the with 0 in long (lat also)
+
+global.data = global.data[(substr(global.data$date, 7, 10) %in% c("1991","1992","1993","1994","1995",
+                                                                  "1996","1997","1998","1999","2000",
+                                                                  "2001","2002","2003","2004","2005",
+                                                                  "2006","2007","2008","2009","2010",
+                                                                  "2011","2012","2013","2014","2014",
+                                                                  "2015","2016","2017","2018")),] 
 
 #Rewrite code
 for (i in 1:dim(global.data)[1]){
@@ -140,8 +155,12 @@ for (i in 1:dim(global.data)[1]){
   }
 }
 
-global.data = global.data[-which(global.data$orientation=='T'),] # delete the with 0 in long (lat also)
-global.data = global.data[-which(global.data$long==0),] # delete the with 0 in long (lat also)
+
+global.final.data = global.data[-which(is.na(global.data$long)),] # delete the with 0 in long (lat also)
+global.final.data = global.final.data[-which(is.na(global.data$lat)),] # delete the with 0 in long (lat also)
+
+
+
 
 write.csv(global.data, "../data/all_data.csv")
 cat("number of negative events : ", sum(global.data$avalanche == 0))
