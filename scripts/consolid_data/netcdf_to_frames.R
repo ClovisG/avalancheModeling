@@ -137,7 +137,7 @@ getFrames<-function(){
   library(RColorBrewer)
   library(ncdf4)
   nc <- nc_open("../download/weather.nc")
-  print(nc)
+  #print(nc)
   
   # Variables
   cdir <- "cdir"
