@@ -1,0 +1,158 @@
+---
+title: "Prediction avalanche"
+author: "Gaétan LEPAGE, Martin HERAULT"
+output:
+  html_notebook
+keep_tex: yes
+---
+
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(0)
+library(ggplot2)
+library(keras)
+#install_keras(tensorflow = "gpu")
+```
+
+# Importing the data
+
+## Import
+```{r}
+data = read.csv("../../data/all_data.csv")
+
+y = data$avalanche
+
+x_cols = 8:ncol(data)
+X = as.data.frame(data[, x_cols])
+```
+
+
+## Standardizing
+```{r}
+# Getting information about the dataset
+old_means = colMeans(X)
+old_sd = apply(X, 2, sd)
+
+# We standardize the data
+X = scale(X)
+
+# We then control the changes
+new_means = colMeans(X)
+new_sd = apply(X, 2, sd)
+```
+
+
+## Splitting our data in a train set and a test set
+
+```{r}
+split_ind = y %>% caret::createDataPartition(p = 0.8, list=FALSE)
+
+x_train = X[split_ind,]
+y_train = y[split_ind]
+x_test = X[-split_ind,]
+y_test = y[-split_ind]
+
+n_train = length(y_train)
+n_train_pos = sum(y_train)
+n_train_neg = sum(!y_train)
+n_test = length(y_test)
+n_test_pos = sum(y_test)
+n_test_neg = sum(!y_test)
+
+
+barplot(
+        rbind(
+              c(n_train_pos, n_test_pos),
+              c(n_train_neg, n_test_neg)
+              ),
+        col=c("red", "darkblue"),
+        beside = TRUE,
+        main="train/test sets partition",
+        ylab="number of samples",
+        legend.text=c("positive events", "negative events"),
+        names.arg=c("train set", "test set")
+        )
+
+cat("train set : ", n_train, "events (", n_train_pos, "positive |", n_train_neg," negative)\n")
+cat("test set : ", n_test, "events (", n_test_pos, "positive |", n_test_neg," negative)\n")
+```
+
+
+# Autoencoder
+
+```{r results="hide"}
+# Setting up the data
+x_train = as.matrix(x_train)
+y_train = keras::to_categorical(y_train)
+x_test = as.matrix(x_test)
+y_test = keras::to_categorical(y_test)
+
+p = ncol(x_train)
+encoding_dim = 2
+input_layer = layer_input(shape = p)
+
+encoder <- input_layer %>%
+  layer_dense(units = 4, input_shape = p) %>%
+	layer_activation_leaky_relu(alpha=0.05) %>% 
+  layer_dropout(rate = 0.5) %>% 
+	layer_batch_normalization() %>%
+  layer_dense(units = 2, input_shape = 4) %>%
+	layer_activation_leaky_relu(alpha=0.05) %>% 
+  layer_dropout(rate = 0.5)
+
+decoder <- encoder %>%
+  layer_dense(units = 4, input_shape = 2) %>%
+	layer_activation_leaky_relu(alpha=0.05) %>% 
+  layer_dropout(rate = 0.5) %>% 
+  layer_dense(units = p) %>% 
+	layer_activation_leaky_relu(alpha=0.05) 
+
+autoencoder = keras_model(inputs = input_layer, outputs = decoder)
+
+summary(autoencoder)
+
+# library(deepviz)
+# library(magrittr)
+# plot_model(autoencoder)
+
+autoencoder %>% compile(
+  loss='mean_squared_error',
+  optimizer='adam',
+  metrics = c('mse')
+)
+
+summary(autoencoder)
+
+
+history =
+  autoencoder %>%
+  keras::fit(x_train,
+             x_train,
+             epochs=20,
+             shuffle=TRUE,
+             validation_data= list(x_test, x_test)
+             )
+
+plot(history)
+
+```
+```{r}
+encoder_model <- keras_model(inputs = input_layer, outputs = encoder)
+projection <- 
+  encoder_model %>% 
+  keras::predict_on_batch(x = X)
+
+head(projection)
+toPlot = data.frame(projection)
+toPlot = cbind(toPlot,data.frame(event = y))
+ggplot(toPlot) + geom_point(aes(x=X1,y=X2,fill=event))
+```
+
+# Neural network
+
+--> on essaiera d'utiliser la partie gauche de l'autoencoder
+
+# Conclusion
+
+--> Faire un barplot avec des accuracies
