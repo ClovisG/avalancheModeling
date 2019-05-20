@@ -49,3 +49,6 @@ from pyproj import Proj, transform
 print(transform(Proj(init='epsg:4326'), Proj(init='epsg:3857'), -0.1285907, 51.50809))  # longitude first, latitude second.
 ```
 
+### Notes for reading the Shapefiles for EPA data
+
+One can use the Python lib at https://github.com/GeospatialPython/pyshp

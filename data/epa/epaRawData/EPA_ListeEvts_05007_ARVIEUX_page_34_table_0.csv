@@ -1,0 +1,35 @@
+"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41"
+"Site","Dates","","Altitudes","","","","Dépôt","","","Caractéristiques","","","","","","Météo 3 jours
+précédents","","","","","Météo 4h
+précédentes","","","","","","Causes","","","","Vic-
+times","","","Dégâts ou lieux
+atteints","","","","","","Obs",""
+"numéro
+id","date1","date2","altitude départ","altitude arrivée","versant opposé","zone plane","longeur (m)","largeur (m)","hauteur (m)","A - type départ","B - sol visible ?","C - humidité départ","D - couloir / versant","E - aérosol ?","F - neige dépôt","hauteur de neige","vent fort","direction vent","redoux","pluie","neige","pluie","vent fort","ciel clair","nuages","brouillard","naturelle","involontaire","artificielle","inconnue","néant","blessés","morts","néant","construction","poteaux","forêt","routes","cours d'eau","visibilité","alerte bd event"
+"Date du constat : 06/03/2006.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : L'avalanche étant recouverte de neige fraiche elle s'est donc produite avant la chute de neige, celle-ci a cessé en cours de nuit du 4 au 5/03/06 . Altitude d'arrivée et dépôt invisible
+depuis la vallée.  Altitude d'arrivée <2050m. Ne sachant pas l'heure exacte de l'avalanche, il est difficile de dire si la neige fraiche était à ce moment entre 51 et 100cm ou + de 100cm.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°000
+id 268","24/03/96
+00:00","24/03/96
+00:00","2750","2000","","","","","","4","5","2","2","2","2","0","","","","X","","","","X","","","X","","","","X","","","X","","","","","","",""
+"Remarque : Avalanche du Pic de Beaudouis coupant un itinéraire de ski de randonnée et raquettes dans sa partie basse en direction de Clapeyto.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°000
+id 268","04/03/94
+00:00","04/03/94
+00:00","2450","2000","","","","","","4","2","2","2
+2","","2","0","","","","X","","","","X","","","X","","","","X","","","X","","","","","","",""
+"Remarque : Neige fraîche, humide 5 jours avant (21 à 50 cm) suivi de temps ensolleillé, chaud en versant sud. Avalanche du Pic de Beaudouis coupant un itinéraire de ski de randonnée dans
+sa partie basse. Ce site devra être répertorié sur le carnet d'avalanches. Déjà signalé le 09.03.91. BRUNET Daniel ONF  Remarques ajoutées sur feuille : Afin de s'assurer que personne n'est
+enseveli, des recherches ont été effectuées à l'aide de chiens d'avalanches, ARVA, système RECO, par gendarmerie et pisteurs secouristes de la station.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°000
+id 268","09/03/91
+00:00","09/03/91
+00:00","2800","2000","","","","","","4","5","5","2","2","5","1-20","","","X","X","X","","","","","X","X","","","","X","","","X","","","","","","",""
+"Remarque : Avalanche du Pic de Beaudouis. Départ près du sommet. Dans sa partie basse, l'avalanche coupe un itinéraire de ski de randonnée assez fréquenté (chalets de Clapeyto).","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°000
+id 268","10/02/91
+00:00","10/02/91
+00:00","2000","1820","","","","","","2","2","1","2","5","1","51-
+100","","","","","X","","","","","X","X","","","","X","","","X","","","","","","",""
+"Remarque : Avalanche de faible importance mais arrivant sur une piste de ski alpin (Pra Bernard).","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""

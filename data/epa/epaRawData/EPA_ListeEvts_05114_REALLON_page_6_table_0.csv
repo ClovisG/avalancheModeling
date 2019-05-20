@@ -1,0 +1,52 @@
+"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"
+"Historique :","","","Filiations entre les sites définies lors du toilettage du 06/10/2003 :
+Site 05114 004 (id 945) --> site 05114 004 (id 6334)","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Site","Dates","","","Altitudes","","","","Dépôt","","","Caractéristiques","","","","","","Météo 3 jours
+précédents","","","","","Météo 4h
+précédentes","","","","","","Causes","","","","Vic-
+times","","","Dégâts ou lieux
+atteints","","","","","","Obs",""
+"numéro
+id","date1","date2","","altitude départ","altitude arrivée","versant opposé","zone plane","longeur (m)","largeur (m)","hauteur (m)","A - type départ","B - sol visible ?","C - humidité départ","D - couloir / versant","E - aérosol ?","F - neige dépôt","hauteur de neige","vent fort","direction vent","redoux","pluie","neige","pluie","vent fort","ciel clair","nuages","brouillard","naturelle","involontaire","artificielle","inconnue","néant","blessés","morts","néant","construction","poteaux","forêt","routes","cours d'eau","visibilité","alerte bd event"
+"n°004
+id 6334","06/02/17
+13:00","16/02/17
+09:30","","?","1650","","","30","10","1.0","9","1","2","5","2","2","?","?","","?","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 16/02/2017.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Il y a des boules dans le dépôt attestant un neige humide lors de l'avalanche d'où le C 2.
+Le dépôt s'arrête 10 mètres linéaire au dessus du torrent de la gorge.
+Les dernières chutes de neige ont eu lieu les 02 et 03 février pour 50 cm.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°004
+id 6334","07/03/16
+12:00","11/03/16
+17:00","","2540","1630","","","100","6","1.5","4","3","2","5","2","2","0","?","","X","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 11/03/2016.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : L' avalanche part à peine sous le sommet, arrive au torrent de la gorge, qu'elle prend sur 80 ML en direction des Gourniers. Je constate que le dépôt de l'avalanche n° 201 de
+Réallon n'arrive pas à ce point.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°004
+id 6334","17/02/16
+12:00","23/02/16
+16:00","","2500","1830","","","30","6","0.5","4","3","2","2","2","2","0","?","","?","X","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 23/02/2016.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : Pluie abondante dans les 3 jours précédents l'évènement 35 mm jusqu'à 2700 m.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°004
+id 6334","27/01/16
+16:00","02/02/16
+12:00","","2580","1850","","","40","6","0.5","4","5","2","5","2","2","0","?","","X","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 02/02/2016.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : L'avalanche part à peine en aval du sommet (30 ML), du coté gauche du couloir, vue d'en face. Elle démarre en plusieurs cônes.
+ A droite du couloir, une cassure depuis le sommet découvre un peu la roche, situé plus à droite de la cassure évoquée dans l'avis n° 1 du 15-01-2016  . Dans le dépôt présence de boules de
+neige attestant d'une neige humide. Pas du chute de neige dans les 3 jours précédent l'évènement.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°004
+id 6334","11/01/16
+17:00","15/01/16
+16:00","","2580","1850","","","80","30","1.0","8","2","1","2","2","1","21-50","?","","?","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 15/01/2016.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque : L'avalanche part du sommet par une cassure linéaire sur la droite du couloir. Elle emprunte le couloir et de ce fait reste étroite tout le long. A l'arrivée à hauteur des barres situées à
+gauche, le dépôt s'étale en cône, je ne vois néanmoins pas précisément la fin du dépôt.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"n°004
+id 6334","05/03/14
+00:00","11/03/14
+00:00","","2370","1640","","","","","","8","4","2","2","2","2","?","?","","X","?","?","?","?","?","?","?","X","","","","X","","","X","","","","","","B","N"
+"Date du constat : 11/03/2014.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+"Remarque :  Photos transmises à H.GASDON.","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
